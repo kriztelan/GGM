@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing & Delivery - GoldenThreads IMS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Cormorant+Garamond:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/user.css">
+    <link rel="stylesheet" href="/assets/main.css">
+    <link rel="stylesheet" href="/assets/billing.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1 class="sidebar-brand">GoldenThreads</h1>
+                <p class="sidebar-subtitle">IMS</p>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="/templates/main.html" class="nav-item" data-page="main">
+                    <span class="nav-icon">🏠</span>
+                    <span class="nav-text">Dashboard</span>
+                </a>
+                <a href="/templates/order_job.html" class="nav-item" data-page="order_job">
+                    <span class="nav-icon">📋</span>
+                    <span class="nav-text">Order & Job Tracking</span>
+                </a>
+                <a href="/templates/Production_Quality.html" class="nav-item" data-page="Production_Quality">
+                    <span class="nav-icon">⚙️</span>
+                    <span class="nav-text">Production & Quality</span>
+                </a>
+                <a href="/templates/inventory.html" class="nav-item" data-page="inventory">
+                    <span class="nav-icon">📦</span>
+                    <span class="nav-text">Inventory Management</span>
+                </a>
+                <a href="/templates/billing_delivery.html" class="nav-item active" data-page="billing_delivery">
+                    <span class="nav-icon">💰</span>
+                    <span class="nav-text">Billing & Delivery</span>
+                </a>
+                <a href="/templates/Employee_Payroll.html" class="nav-item" data-page="Employee_Payroll">
+                    <span class="nav-icon">👥</span>
+                    <span class="nav-text">Employee & Payroll</span>
+                </a>
+                <a href="/templates/reports.html" class="nav-item" data-page="reports">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-text">Reports & Analytics</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <!-- Enhanced User Info with Settings Dropdown -->
+                <div class="user-info-container">
+                    <div class="user-info" id="userInfoTrigger">
+                        <div class="user-avatar">
+                            <span id="userInitial">U</span>
+                        </div>
+                        <div class="user-details">
+                            <p class="user-name" id="userName">User</p>
+                            <p class="user-role" id="userRole">Administrator</p>
+                        </div>
+                        <div class="user-dropdown-icon">
+                            <span>⚙️</span>
+                        </div>
+                    </div>
+
+                    <!-- Settings Dropdown Menu -->
+                    <div class="user-settings-dropdown" id="userSettingsDropdown">
+                        <div class="dropdown-header">
+                            <span>User Settings</span>
+                        </div>
+                        <ul class="dropdown-menu">
+                            <li class="dropdown-item" id="changePasswordBtn">
+                                <span class="dropdown-icon">🔐</span>
+                                <span>Change Password</span>
+                            </li>
+                            <li class="dropdown-item admin-only" id="createAccountBtn" style="display: none;">
+                                <span class="dropdown-icon">➕</span>
+                                <span>Create New Account</span>
+                            </li>
+                            <li class="dropdown-item admin-only" id="manageAccountsBtn" style="display: none;">
+                                <span class="dropdown-icon">👥</span>
+                                <span>Manage Accounts</span>
+                            </li>
+                            <li class="dropdown-divider"></li>
+                            <li class="dropdown-item" id="aboutSystemBtn">
+                                <span class="dropdown-icon">ℹ️</span>
+                                <span>About System</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <button class="logout-btn" id="logoutBtn">
+                    <span>Logout</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="top-bar">
+                <div class="page-title-section">
+                    <h1 class="page-title">Billing & Delivery Management</h1>
+                    <p class="page-subtitle">Manage payments and delivery status</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-primary" id="refreshBtn">
+                        <span>🔄 Refresh Data</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div class="content-area">
+                <!-- Quick Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-icon">💰</span>
+                            <h3>Total Revenue</h3>
+                        </div>
+                        <p class="stat-value" id="totalRevenue">₱0.00</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-icon">⚠️</span>
+                            <h3>Unpaid Orders</h3>
+                        </div>
+                        <p class="stat-value" id="unpaidCount">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-icon">🚚</span>
+                            <h3>Pending Delivery</h3>
+                        </div>
+                        <p class="stat-value" id="pendingDeliveryCount">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-icon">✅</span>
+                            <h3>Completed</h3>
+                        </div>
+                        <p class="stat-value" id="completedCount">0</p>
+                    </div>
+                </div>
+
+                <!-- Filter and Search -->
+                <div class="filter-section">
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Search by Job Order #, Client Name...">
+                    </div>
+                    <div class="filter-controls">
+                        <select id="paymentStatusFilter" class="filter-select">
+                            <option value="all">All Payment Status</option>
+                            <option value="unpaid">Unpaid</option>
+                            <option value="partially_paid">Partially Paid</option>
+                            <option value="fully_paid">Fully Paid</option>
+                        </select>
+                        <select id="deliveryStatusFilter" class="filter-select">
+                            <option value="all">All Delivery Status</option>
+                            <option value="ready_for_pickup">Ready for Pickup</option>
+                            <option value="out_for_delivery">Out for Delivery</option>
+                            <option value="delivered">Delivered</option>
+                        </select>
+                        <button class="btn-secondary" id="filterBtn">Apply Filter</button>
+                    </div>
+                </div>
+
+                <!-- Billing & Delivery Table -->
+                <div class="table-container">
+                    <table class="data-table" id="billingTable">
+                        <thead>
+                            <tr>
+                                <th>Job Order #</th>
+                                <th>Client Name</th>
+                                <th>Garment Type</th>
+                                <th>Quantity</th>
+                                <th>Total Amount</th>
+                                <th>Amount Paid</th>
+                                <th>Balance</th>
+                                <th>Payment Status</th>
+                                <th>Delivery Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="billingTableBody">
+                            <tr class="empty-state">
+                                <td colspan="10">
+                                    <div class="empty-message">
+                                        <span class="empty-icon">💰</span>
+                                        <p>No billing records yet. Completed job orders will appear here.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal: Billing & Delivery Details -->
+    <div class="modal" id="billingModal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2>Billing & Delivery Details</h2>
+                <button class="close-btn" id="closeBillingModalBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- Job Order Summary -->
+                <div class="billing-section">
+                    <h3 class="section-title">Job Order Information</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">Job Order Number:</span>
+                            <span class="info-value" id="modalJobOrderNumber">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Client Name:</span>
+                            <span class="info-value" id="modalClientName">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Garment Type:</span>
+                            <span class="info-value" id="modalGarmentType">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Quantity:</span>
+                            <span class="info-value" id="modalQuantity">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Billing Summary -->
+                <div class="billing-section">
+                    <h3 class="section-title">Billing Summary</h3>
+                    <div class="billing-summary">
+                        <div class="summary-row">
+                            <span class="summary-label">Total Quotation Amount:</span>
+                            <span class="summary-value" id="modalTotalAmount">₱0.00</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Downpayment:</span>
+                            <span class="summary-value" id="modalDownpayment">₱0.00</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Total Amount Paid:</span>
+                            <span class="summary-value" id="modalAmountPaid">₱0.00</span>
+                        </div>
+                        <div class="summary-row total-row">
+                            <span class="summary-label">Remaining Balance:</span>
+                            <span class="summary-value" id="modalBalance">₱0.00</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Payment Status:</span>
+                            <span class="summary-value">
+                                <span class="status-badge" id="modalPaymentStatus">-</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Recording Section -->
+                <div class="billing-section">
+                    <h3 class="section-title">Record Payment</h3>
+                    <form id="paymentForm">
+                        <input type="hidden" id="recordJobOrderId">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="paymentAmount">Payment Amount (₱) *</label>
+                                <input type="number" id="paymentAmount" step="0.01" min="0" required placeholder="0.00">
+                            </div>
+                            <div class="form-group">
+                                <label for="paymentDate">Payment Date *</label>
+                                <input type="date" id="paymentDate" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="paymentMethod">Payment Method *</label>
+                            <select id="paymentMethod" required>
+                                <option value="">Select Payment Method</option>
+                                <option value="Cash">Cash</option>
+                                <option value="Bank Transfer">Bank Transfer</option>
+                                <option value="Check">Check</option>
+                                <option value="GCash">GCash</option>
+                                <option value="PayMaya">PayMaya</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="paymentNotes">Notes (Optional)</label>
+                            <textarea id="paymentNotes" rows="2" placeholder="Additional payment details..."></textarea>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary">💰 Record Payment</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Payment History -->
+                <div class="billing-section">
+                    <h3 class="section-title">Payment History</h3>
+                    <div class="table-container">
+                        <table class="data-table payment-history-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Amount</th>
+                                    <th>Method</th>
+                                    <th>Notes</th>
+                                </tr>
+                            </thead>
+                            <tbody id="paymentHistoryBody">
+                                <tr>
+                                    <td colspan="4" style="text-align: center; color: #999;">No payment records yet</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Delivery Management Section -->
+                <div class="billing-section">
+                    <h3 class="section-title">Delivery Management</h3>
+                    <form id="deliveryForm">
+                        <input type="hidden" id="deliveryJobOrderId">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="deliveryStatus">Delivery Status *</label>
+                                <select id="deliveryStatus" required>
+                                    <option value="">Select Status</option>
+                                    <option value="ready_for_pickup">Ready for Pickup</option>
+                                    <option value="out_for_delivery">Out for Delivery</option>
+                                    <option value="delivered">Delivered</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="deliveryDate">Date *</label>
+                                <input type="date" id="deliveryDate" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="deliveryNotes">Delivery Notes (Optional)</label>
+                            <textarea id="deliveryNotes" rows="2" placeholder="Delivery details, courier, etc..."></textarea>
+                        </div>
+                        <div class="info-note">
+                            <span class="note-icon">📱</span>
+                            <p>SMS notification will be sent to the client when delivery status is updated.</p>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary">🚚 Update Delivery Status</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Delivery Log -->
+                <div class="billing-section">
+                    <h3 class="section-title">Delivery Log</h3>
+                    <div class="table-container">
+                        <table class="data-table delivery-log-table">
+                            <thead>
+                                <tr>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                    <th>Notes</th>
+                                    <th>Updated By</th>
+                                </tr>
+                            </thead>
+                            <tbody id="deliveryLogBody">
+                                <tr>
+                                    <td colspan="4" style="text-align: center; color: #999;">No delivery updates yet</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Change Password -->
+    <div class="modal" id="changePasswordModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🔐 Change Password</h2>
+                <button class="close-btn" id="closeChangePasswordBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="changePasswordForm">
+                    <div class="form-group">
+                        <label for="currentPassword">Current Password *</label>
+                        <input type="password" id="currentPassword" required placeholder="Enter current password">
+                    </div>
+                    <div class="form-group">
+                        <label for="newPassword">New Password *</label>
+                        <input type="password" id="newPassword" required placeholder="Enter new password">
+                        <small class="form-hint">Password must be at least 6 characters long</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm New Password *</label>
+                        <input type="password" id="confirmPassword" required placeholder="Re-enter new password">
+                    </div>
+                    <div class="password-strength" id="passwordStrength" style="display: none;">
+                        <div class="strength-bar">
+                            <div class="strength-fill"></div>
+                        </div>
+                        <span class="strength-text"></span>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" id="cancelChangePasswordBtn">Cancel</button>
+                        <button type="submit" class="btn-primary">Change Password</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Create New Account (Admin Only) -->
+    <div class="modal" id="createAccountModal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2>➕ Create New Account</h2>
+                <button class="close-btn" id="closeCreateAccountBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="createAccountForm">
+                    <div class="form-section">
+                        <h3 class="section-title">Account Information</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="newUsername">Username *</label>
+                                <input type="text" id="newUsername" required placeholder="Enter username">
+                                <small class="form-hint">Username must be unique</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="newDisplayName">Display Name *</label>
+                                <input type="text" id="newDisplayName" required placeholder="Enter display name">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="newAccountPassword">Password *</label>
+                                <input type="password" id="newAccountPassword" required placeholder="Enter password">
+                            </div>
+                            <div class="form-group">
+                                <label for="newAccountRole">Role *</label>
+                                <select id="newAccountRole" required>
+                                    <option value="">Select Role</option>
+                                    <option value="administrator">Administrator</option>
+                                    <option value="staff">Staff</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3 class="section-title">Permissions</h3>
+                        <div class="permissions-grid" id="permissionsGrid">
+                            <label class="permission-item">
+                                <input type="checkbox" name="permission" value="order & job" checked>
+                                <span>📋 Order & Job Tracking</span>
+                            </label>
+                            <label class="permission-item">
+                                <input type="checkbox" name="permission" value="Production & Quality" checked>
+                                <span>⚙️ Production & Quality</span>
+                            </label>
+                            <label class="permission-item">
+                                <input type="checkbox" name="permission" value="inventory" checked>
+                                <span>📦 Inventory Management</span>
+                            </label>
+                            <label class="permission-item">
+                                <input type="checkbox" name="permission" value="billing & delivery" checked>
+                                <span>💰 Billing & Delivery</span>
+                            </label>
+                            <label class="permission-item">
+                                <input type="checkbox" name="permission" value="Employee & Payroll">
+                                <span>👥 Employee & Payroll</span>
+                            </label>
+                            <label class="permission-item">
+                                <input type="checkbox" name="permission" value="reports">
+                                <span>📊 Reports & Analytics</span>
+                            </label>
+                        </div>
+                        <p class="form-hint">Select modules this user can access</p>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" id="cancelCreateAccountBtn">Cancel</button>
+                        <button type="submit" class="btn-primary">Create Account</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Manage Accounts (Admin Only) -->
+    <div class="modal" id="manageAccountsModal">
+        <div class="modal-content modal-xlarge">
+            <div class="modal-header">
+                <h2>👥 Manage User Accounts</h2>
+                <button class="close-btn" id="closeManageAccountsBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="accounts-header">
+                    <div class="search-box">
+                        <input type="text" id="accountSearchInput" placeholder="Search users...">
+                    </div>
+                    <button class="btn-primary" id="addNewAccountBtn">+ Add New Account</button>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Display Name</th>
+                                <th>Role</th>
+                                <th>Permissions</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="accountsTableBody">
+                            <!-- Populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: About System -->
+    <div class="modal" id="aboutSystemModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>ℹ️ About GoldenThreads IMS</h2>
+                <button class="close-btn" id="closeAboutSystemBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="about-content">
+                    <div class="about-logo">
+                        <h1 class="logo-text">GoldenThreads</h1>
+                        <p class="logo-subtitle">Integrated Management System</p>
+                    </div>
+                    <div class="about-info">
+                        <div class="info-item">
+                            <strong>Version:</strong> 1.0.0
+                        </div>
+                        <div class="info-item">
+                            <strong>Release Date:</strong> January 2026
+                        </div>
+                        <div class="info-item">
+                            <strong>Modules:</strong> Order Tracking, Production, Inventory, Billing, Payroll, Reports
+                        </div>
+                        <div class="info-item">
+                            <strong>Description:</strong> Comprehensive management system for garment manufacturing operations
+                        </div>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button class="btn-primary" id="closeAboutBtn">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/function/main.js"></script>
+    <script src="/function/user.js"></script>
+    <script src="/function/billing.js"></script>
+</body>
+</html>

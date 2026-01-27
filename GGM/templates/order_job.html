@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order & Job Management - GoldenThreads IMS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Cormorant+Garamond:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/user.css">
+    <link rel="stylesheet" href="/assets/main.css">
+    <link rel="stylesheet" href="/assets/orders.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1 class="sidebar-brand">GoldenThreads</h1>
+                <p class="sidebar-subtitle">IMS</p>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="/templates/main.html" class="nav-item" data-page="main">
+                    <span class="nav-icon">🏠</span>
+                    <span class="nav-text">Dashboard</span>
+                </a>
+                <a href="/templates/order_job.html" class="nav-item active" data-page="order_job">
+                    <span class="nav-icon">📋</span>
+                    <span class="nav-text">Order & Job Tracking</span>
+                </a>
+                <a href="/templates/Production_Quality.html" class="nav-item" data-page="Production_Quality">
+                    <span class="nav-icon">⚙️</span>
+                    <span class="nav-text">Production & Quality</span>
+                </a>
+                <a href="/templates/inventory.html" class="nav-item" data-page="inventory">
+                    <span class="nav-icon">📦</span>
+                    <span class="nav-text">Inventory Management</span>
+                </a>
+                <a href="/templates/billing_delivery.html" class="nav-item" data-page="billing_delivery">
+                    <span class="nav-icon">💰</span>
+                    <span class="nav-text">Billing & Delivery</span>
+                </a>
+                <a href="/templates/Employee_Payroll.html" class="nav-item" data-page="Employee_Payroll">
+                    <span class="nav-icon">👥</span>
+                    <span class="nav-text">Employee & Payroll</span>
+                </a>
+                <a href="/templates/reports.html" class="nav-item" data-page="reports">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-text">Reports & Analytics</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+            <!-- Enhanced User Info with Settings Dropdown -->
+            <div class="user-info-container">
+                <div class="user-info" id="userInfoTrigger">
+                    <div class="user-avatar">
+                        <span id="userInitial">U</span>
+                    </div>
+                    <div class="user-details">
+                        <p class="user-name" id="userName">User</p>
+                        <p class="user-role" id="userRole">Administrator</p>
+                    </div>
+                    <div class="user-dropdown-icon">
+                        <span>⚙️</span>
+                    </div>
+                </div>
+
+                    <!-- Settings Dropdown Menu -->
+                <div class="user-settings-dropdown" id="userSettingsDropdown">
+                        <div class="dropdown-header">
+                            <span>User Settings</span>
+                        </div>
+                        <ul class="dropdown-menu">
+                            <li class="dropdown-item" id="changePasswordBtn">
+                                <span class="dropdown-icon">🔐</span>
+                                <span>Change Password</span>
+                            </li>
+                            <li class="dropdown-item admin-only" id="createAccountBtn" style="display: none;">
+                                <span class="dropdown-icon">➕</span>
+                                <span>Create New Account</span>
+                            </li>
+                            <li class="dropdown-item admin-only" id="manageAccountsBtn" style="display: none;">
+                                <span class="dropdown-icon">👥</span>
+                                <span>Manage Accounts</span>
+                            </li>
+                            <li class="dropdown-divider"></li>
+                            <li class="dropdown-item" id="aboutSystemBtn">
+                                <span class="dropdown-icon">ℹ️</span>
+                                <span>About System</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <button class="logout-btn" id="logoutBtn">
+                    <span>Logout</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="top-bar">
+                <div class="page-title-section">
+                    <h1 class="page-title">Order & Job Management</h1>
+                    <p class="page-subtitle">Manage client orders and job tracking</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-primary" id="newOrderBtn">
+                        <span>+ New Quotation</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div class="content-area">
+                <!-- Quick Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-icon">📝</span>
+                            <h3>Draft Orders</h3>
+                        </div>
+                        <p class="stat-value" id="draftCount">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-icon">💰</span>
+                            <h3>Quoted</h3>
+                        </div>
+                        <p class="stat-value" id="quotedCount">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-icon">✅</span>
+                            <h3>Approved</h3>
+                        </div>
+                        <p class="stat-value" id="approvedCount">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-icon">🔧</span>
+                            <h3>Job Orders</h3>
+                        </div>
+                        <p class="stat-value" id="jobOrderCount">0</p>
+                    </div>
+                </div>
+
+                <!-- Filter and Search -->
+                <div class="filter-section">
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Search by Order ID, Client Name, or Garment Type...">
+                    </div>
+                    <div class="filter-controls">
+                        <select id="statusFilter" class="filter-select">
+                            <option value="all">All Statuses</option>
+                            <option value="draft">Draft</option>
+                            <option value="quoted">Quoted</option>
+                            <option value="approved">Approved</option>
+                            <option value="job_created">Job Created</option>
+                        </select>
+                        <button class="btn-secondary" id="filterBtn">Apply Filter</button>
+                    </div>
+                </div>
+
+                <!-- Orders Table -->
+                <div class="table-container">
+                    <table class="data-table" id="ordersTable">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Client Name</th>
+                                <th>Garment Type</th>
+                                <th>Quantity</th>
+                                <th>Status</th>
+                                <th>Date Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersTableBody">
+                            <tr class="empty-state">
+                                <td colspan="7">
+                                    <div class="empty-message">
+                                        <span class="empty-icon">📋</span>
+                                        <p>No orders yet. Click "New Quotation" to create your first order.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal: New/Edit Order (Multi-Step) -->
+    <div class="modal" id="orderModal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2 id="modalTitle">New Quotation</h2>
+                <button class="close-btn" id="closeModalBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- Progress Steps -->
+                <div class="progress-steps">
+                    <div class="step active" data-step="1">
+                        <span class="step-number">1</span>
+                        <span class="step-label">Client Info</span>
+                    </div>
+                    <div class="step" data-step="2">
+                        <span class="step-number">2</span>
+                        <span class="step-label">Size Breakdown</span>
+                    </div>
+                    <div class="step" data-step="3">
+                        <span class="step-number">3</span>
+                        <span class="step-label">Base Cost</span>
+                    </div>
+                    <div class="step" data-step="4">
+                        <span class="step-number">4</span>
+                        <span class="step-label">Accessories</span>
+                    </div>
+                    <div class="step" data-step="5">
+                        <span class="step-number">5</span>
+                        <span class="step-label">Review</span>
+                    </div>
+                </div>
+
+                <form id="orderForm">
+                    <input type="hidden" id="orderID">
+                    
+                    <!-- Step 1: Client & Order Information -->
+                    <div class="form-step active" data-step="1">
+                        <div class="form-section">
+                            <h3 class="section-title">Client Information</h3>
+                            <div class="form-group">
+                                <label for="clientName">Client Name *</label>
+                                <input type="text" id="clientName" required placeholder="Enter client name">
+                            </div>
+                            <div class="form-group">
+                                <label for="clientContact">Contact Number *</label>
+                                <input type="tel" id="clientContact" required placeholder="0917-123-4567">
+                            </div>
+                            <div class="form-group">
+                                <label for="clientAddress">Address</label>
+                                <textarea id="clientAddress" rows="2" placeholder="Client address (optional)"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h3 class="section-title">Order Details</h3>
+                            <div class="form-group">
+                                <label for="garmentType">Garment Type *</label>
+                                <select id="garmentType" required>
+                                    <option value="">Select Garment Type</option>
+                                    <option value="T-Shirt">T-Shirt</option>
+                                    <option value="Polo Shirt">Polo Shirt</option>
+                                    <option value="Dress Shirt">Dress Shirt</option>
+                                    <option value="Pants">Pants</option>
+                                    <option value="Jacket">Jacket</option>
+                                    <option value="Uniform">Uniform</option>
+                                    <option value="Custom">Custom</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="targetDeliveryDate">Target Delivery Date</label>
+                                <input type="date" id="targetDeliveryDate">
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary" id="cancelBtn">Cancel</button>
+                            <button type="button" class="btn-primary" onclick="goToStep(2)">Next</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Size Breakdown -->
+                    <div class="form-step" data-step="2">
+                        <div class="form-section">
+                            <h3 class="section-title">Size Breakdown Input</h3>
+                            <p class="section-subtitle">Enter quantity for each size</p>
+                            
+                            <div class="size-quantity-grid">
+                                <div class="size-input-row">
+                                    <label class="size-label">Extra Small (XS)</label>
+                                    <input type="number" id="qtyXS" class="size-qty-input" min="0" value="0">
+                                </div>
+                                <div class="size-input-row">
+                                    <label class="size-label">Small (S)</label>
+                                    <input type="number" id="qtySmall" class="size-qty-input" min="0" value="0">
+                                </div>
+                                <div class="size-input-row">
+                                    <label class="size-label">Medium (M)</label>
+                                    <input type="number" id="qtyMedium" class="size-qty-input" min="0" value="0">
+                                </div>
+                                <div class="size-input-row">
+                                    <label class="size-label">Large (L)</label>
+                                    <input type="number" id="qtyLarge" class="size-qty-input" min="0" value="0">
+                                </div>
+                                <div class="size-input-row">
+                                    <label class="size-label">Extra Large (XL)</label>
+                                    <input type="number" id="qtyXL" class="size-qty-input" min="0" value="0">
+                                </div>
+                                <div class="size-input-row">
+                                    <label class="size-label">XXL</label>
+                                    <input type="number" id="qty2XL" class="size-qty-input" min="0" value="0">
+                                </div>
+                                <div class="size-input-row">
+                                    <label class="size-label">3XL</label>
+                                    <input type="number" id="qty3XL" class="size-qty-input" min="0" value="0">
+                                </div>
+                            </div>
+
+                            <div class="totals-display">
+                                <div class="total-row">
+                                    <span class="total-label">Total Quantity:</span>
+                                    <span class="total-value" id="displayTotalQty">0 pcs</span>
+                                </div>
+                                <div class="total-row">
+                                    <span class="total-label">Estimated Fabric Usage:</span>
+                                    <span class="total-value" id="displayFabricUsage">0.00 meters</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary" onclick="goToStep(1)">Back</button>
+                            <button type="button" class="btn-primary" onclick="goToStep(3)">Next</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Base Cost Auto-Calculation -->
+                    <div class="form-step" data-step="3">
+                        <div class="form-section">
+                            <h3 class="section-title">Base Cost Breakdown</h3>
+                            <p class="section-subtitle">Automatically calculated based on size and garment type</p>
+                            
+                            <div class="cost-breakdown">
+                                <div class="cost-row">
+                                    <span class="cost-label">Fabric Cost:</span>
+                                    <span class="cost-value" id="displayFabricCost">₱0.00</span>
+                                </div>
+                                <div class="cost-row">
+                                    <span class="cost-label">Labor Cost:</span>
+                                    <span class="cost-value" id="displayLaborCost">₱0.00</span>
+                                </div>
+                                <div class="cost-row">
+                                    <span class="cost-label">Overhead:</span>
+                                    <span class="cost-value" id="displayOverheadCost">₱0.00</span>
+                                </div>
+                                <div class="cost-row">
+                                    <span class="cost-label">Profit:</span>
+                                    <span class="cost-value" id="displayProfitCost">₱0.00</span>
+                                </div>
+                                <div class="cost-row total-cost">
+                                    <span class="cost-label">Base Total Cost:</span>
+                                    <span class="cost-value" id="displayBaseTotalCost">₱0.00</span>
+                                </div>
+                            </div>
+
+                            <div class="info-note">
+                                <span class="note-icon">📌</span>
+                                <p>Values are automatically calculated and locked. Proceed to add accessories or review.</p>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary" onclick="goToStep(2)">Back</button>
+                            <button type="button" class="btn-primary" onclick="goToStep(4)">Next</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Accessories & Design Add-Ons -->
+                    <div class="form-step" data-step="4">
+                        <div class="form-section">
+                            <h3 class="section-title">Accessories & Design Add-Ons</h3>
+                            <p class="section-subtitle">Add accessories with manual pricing</p>
+                            
+                            <div class="accessories-section">
+                                <table class="accessories-table" id="accessoriesTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Accessory Type</th>
+                                            <th>Brand/Description</th>
+                                            <th>Cost per Unit (₱)</th>
+                                            <th>Qty</th>
+                                            <th>Total (₱)</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="accessoriesTableBody">
+                                        <tr class="empty-accessories">
+                                            <td colspan="6" style="text-align: center; padding: 2rem; color: #999;">
+                                                No accessories added yet
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <button type="button" class="btn-secondary btn-small" id="addAccessoryBtn" onclick="addAccessoryRow()">
+                                    ➕ Add Accessory
+                                </button>
+                            </div>
+
+                            <div class="cost-summary">
+                                <div class="cost-row">
+                                    <span class="cost-label">Additional Accessories Cost:</span>
+                                    <span class="cost-value" id="displayAccessoriesCost">₱0.00</span>
+                                </div>
+                                <div class="cost-row">
+                                    <span class="cost-label">Extra Labor (10%):</span>
+                                    <span class="cost-value" id="displayExtraLaborCost">₱0.00</span>
+                                </div>
+                                <div class="cost-row total-cost">
+                                    <span class="cost-label">Updated Total Cost:</span>
+                                    <span class="cost-value" id="displayUpdatedTotalCost">₱0.00</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary" onclick="goToStep(3)">Back</button>
+                            <button type="button" class="btn-primary" onclick="goToStep(5)">Next</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 5: Review & Summary -->
+                    <div class="form-step" data-step="5">
+                        <div class="form-section">
+                            <h3 class="section-title">Quotation Summary & Review</h3>
+                            <div id="quotationSummary">
+                                <!-- Summary will be populated by JavaScript -->
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h3 class="section-title">Additional Information</h3>
+                            <div class="form-group">
+                                <label for="fabricType">Fabric Type</label>
+                                <select id="fabricType">
+                                    <option value="">Select Fabric</option>
+                                    <option value="Cotton">Cotton</option>
+                                    <option value="Polyester">Polyester</option>
+                                    <option value="Cotton-Polyester Blend">Cotton-Polyester Blend</option>
+                                    <option value="Denim">Denim</option>
+                                    <option value="Silk">Silk</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="specialInstructions">Special Instructions</label>
+                                <textarea id="specialInstructions" rows="3" placeholder="Any special requirements..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="orderStatus">Status</label>
+                                <select id="orderStatus">
+                                    <option value="draft">Draft</option>
+                                    <option value="quoted">Quoted</option>
+                                    <option value="approved">Approved</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary" onclick="goToStep(4)">Back</button>
+                            <button type="submit" class="btn-primary">Save Quotation</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Job Order Creation -->
+    <div class="modal" id="jobOrderModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Create Job Order</h2>
+                <button class="close-btn" id="closeJobModalBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="jobOrderForm">
+                    <input type="hidden" id="jobOrderOrderId">
+                    
+                    <div class="form-section">
+                        <h3 class="section-title">Job Order Details</h3>
+                        <div class="form-group">
+                            <label for="jobOrderNumber">Job Order Number</label>
+                            <input type="text" id="jobOrderNumber" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="assignedDepartment">Assigned Department *</label>
+                            <select id="assignedDepartment" required>
+                                <option value="">Select Department</option>
+                                <option value="Cutting">Cutting</option>
+                                <option value="Sewing">Sewing</option>
+                                <option value="Finishing">Finishing</option>
+                                <option value="Quality Control">Quality Control</option>
+                                <option value="Packaging">Packaging</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="targetStartDate">Target Start Date *</label>
+                            <input type="date" id="targetStartDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="targetCompletionDate">Target Completion Date *</label>
+                            <input type="date" id="targetCompletionDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="priorityLevel">Priority Level *</label>
+                            <select id="priorityLevel" required>
+                                <option value="">Select Priority</option>
+                                <option value="Low">Low</option>
+                                <option value="Medium">Medium</option>
+                                <option value="High">High</option>
+                                <option value="Urgent">Urgent</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="jobOrderNotes">Notes</label>
+                            <textarea id="jobOrderNotes" rows="3" placeholder="Additional notes..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" id="cancelJobBtn">Cancel</button>
+                        <button type="submit" class="btn-primary">Create Job Order</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: View Order Details -->
+    <div class="modal" id="viewOrderModal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2>Order Details</h2>
+                <button class="close-btn" id="closeViewModalBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="orderDetailsContent"></div>
+            </div>
+        </div>
+    </div>
+
+   <!-- Modal: Change Password -->
+    <div class="modal" id="changePasswordModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🔐 Change Password</h2>
+                <button class="close-btn" id="closeChangePasswordBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="changePasswordForm">
+                    <div class="form-group">
+                        <label for="currentPassword">Current Password *</label>
+                        <input type="password" id="currentPassword" required placeholder="Enter current password">
+                    </div>
+                    <div class="form-group">
+                        <label for="newPassword">New Password *</label>
+                        <input type="password" id="newPassword" required placeholder="Enter new password">
+                        <small class="form-hint">Password must be at least 6 characters long</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm New Password *</label>
+                        <input type="password" id="confirmPassword" required placeholder="Re-enter new password">
+                    </div>
+                    <div class="password-strength" id="passwordStrength" style="display: none;">
+                        <div class="strength-bar">
+                            <div class="strength-fill"></div>
+                        </div>
+                        <span class="strength-text"></span>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" id="cancelChangePasswordBtn">Cancel</button>
+                        <button type="submit" class="btn-primary">Change Password</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Create New Account (Admin Only) -->
+    <div class="modal" id="createAccountModal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2>➕ Create New Account</h2>
+                <button class="close-btn" id="closeCreateAccountBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="createAccountForm">
+                    <div class="form-section">
+                        <h3 class="section-title">Account Information</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="newUsername">Username *</label>
+                                <input type="text" id="newUsername" required placeholder="Enter username">
+                                <small class="form-hint">Username must be unique</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="newDisplayName">Display Name *</label>
+                                <input type="text" id="newDisplayName" required placeholder="Enter display name">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="newAccountPassword">Password *</label>
+                                <input type="password" id="newAccountPassword" required placeholder="Enter password">
+                            </div>
+                            <div class="form-group">
+                                <label for="newAccountRole">Role *</label>
+                                <select id="newAccountRole" required>
+                                    <option value="">Select Role</option>
+                                    <option value="administrator">Administrator</option>
+                                    <option value="staff">Staff</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3 class="section-title">Permissions</h3>
+                        <div class="permissions-grid" id="permissionsGrid">
+                            <label class="permission-item">
+                                <input type="checkbox" name="permission" value="order & job" checked>
+                                <span>📋 Order & Job Tracking</span>
+                            </label>
+                            <label class="permission-item">
+                                <input type="checkbox" name="permission" value="Production & Quality" checked>
+                                <span>⚙️ Production & Quality</span>
+                            </label>
+                            <label class="permission-item">
+                                <input type="checkbox" name="permission" value="inventory" checked>
+                                <span>📦 Inventory Management</span>
+                            </label>
+                            <label class="permission-item">
+                                <input type="checkbox" name="permission" value="billing & delivery" checked>
+                                <span>💰 Billing & Delivery</span>
+                            </label>
+                            <label class="permission-item">
+                                <input type="checkbox" name="permission" value="Employee & Payroll">
+                                <span>👥 Employee & Payroll</span>
+                            </label>
+                            <label class="permission-item">
+                                <input type="checkbox" name="permission" value="reports">
+                                <span>📊 Reports & Analytics</span>
+                            </label>
+                        </div>
+                        <p class="form-hint">Select modules this user can access</p>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" id="cancelCreateAccountBtn">Cancel</button>
+                        <button type="submit" class="btn-primary">Create Account</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Manage Accounts (Admin Only) -->
+    <div class="modal" id="manageAccountsModal">
+        <div class="modal-content modal-xlarge">
+            <div class="modal-header">
+                <h2>👥 Manage User Accounts</h2>
+                <button class="close-btn" id="closeManageAccountsBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="accounts-header">
+                    <div class="search-box">
+                        <input type="text" id="accountSearchInput" placeholder="Search users...">
+                    </div>
+                    <button class="btn-primary" id="addNewAccountBtn">+ Add New Account</button>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Display Name</th>
+                                <th>Role</th>
+                                <th>Permissions</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="accountsTableBody">
+                            <!-- Populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: About System -->
+    <div class="modal" id="aboutSystemModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>ℹ️ About GoldenThreads IMS</h2>
+                <button class="close-btn" id="closeAboutSystemBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="about-content">
+                    <div class="about-logo">
+                        <h1 class="logo-text">GoldenThreads</h1>
+                        <p class="logo-subtitle">Integrated Management System</p>
+                    </div>
+                    <div class="about-info">
+                        <div class="info-item">
+                            <strong>Version:</strong> 1.0.0
+                        </div>
+                        <div class="info-item">
+                            <strong>Release Date:</strong> January 2026
+                        </div>
+                        <div class="info-item">
+                            <strong>Modules:</strong> Order Tracking, Production, Inventory, Billing, Payroll, Reports
+                        </div>
+                        <div class="info-item">
+                            <strong>Description:</strong> Comprehensive management system for garment manufacturing operations
+                        </div>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button class="btn-primary" id="closeAboutBtn">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/function/main.js"></script>
+    <script src="/function/user.js"></script>
+    <script src="/function/orders.js"></script>
+</body>
+</html>

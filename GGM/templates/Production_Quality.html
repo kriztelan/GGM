@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Production & Quality Management - GoldenThreads IMS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Cormorant+Garamond:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/main.css">
+    <link rel="stylesheet" href="/assets/user.css">
+    <link rel="stylesheet" href="/assets/production.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1 class="sidebar-brand">GoldenThreads</h1>
+                <p class="sidebar-subtitle">IMS</p>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="/templates/main.html" class="nav-item" data-page="main">
+                    <span class="nav-icon">🏠</span>
+                    <span class="nav-text">Dashboard</span>
+                </a>
+                <a href="/templates/order_job.html" class="nav-item" data-page="order_job">
+                    <span class="nav-icon">📋</span>
+                    <span class="nav-text">Order & Job Tracking</span>
+                </a>
+                <a href="/templates/Production_Quality.html" class="nav-item active" data-page="Production_Quality">
+                    <span class="nav-icon">⚙️</span>
+                    <span class="nav-text">Production & Quality</span>
+                </a>
+                <a href="/templates/inventory.html" class="nav-item" data-page="inventory">
+                    <span class="nav-icon">📦</span>
+                    <span class="nav-text">Inventory Management</span>
+                </a>
+                <a href="/templates/billing_delivery.html" class="nav-item" data-page="billing_delivery">
+                    <span class="nav-icon">💰</span>
+                    <span class="nav-text">Billing & Delivery</span>
+                </a>
+                <a href="/templates/Employee_Payroll.html" class="nav-item" data-page="Employee_Payroll">
+                    <span class="nav-icon">👥</span>
+                    <span class="nav-text">Employee & Payroll</span>
+                </a>
+                <a href="/templates/reports.html" class="nav-item" data-page="reports">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-text">Reports & Analytics</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <!-- Enhanced User Info with Settings Dropdown -->
+                <div class="user-info-container">
+                    <div class="user-info" id="userInfoTrigger">
+                        <div class="user-avatar">
+                            <span id="userInitial">U</span>
+                        </div>
+                        <div class="user-details">
+                            <p class="user-name" id="userName">User</p>
+                            <p class="user-role" id="userRole">Administrator</p>
+                        </div>
+                        <div class="user-dropdown-icon">
+                            <span>⚙️</span>
+                        </div>
+                    </div>
+
+                    <!-- Settings Dropdown Menu -->
+                    <div class="user-settings-dropdown" id="userSettingsDropdown">
+                        <div class="dropdown-header">
+                            <span>User Settings</span>
+                        </div>
+                        <ul class="dropdown-menu">
+                            <li class="dropdown-item" id="changePasswordBtn">
+                                <span class="dropdown-icon">🔐</span>
+                                <span>Change Password</span>
+                            </li>
+                            <li class="dropdown-item admin-only" id="createAccountBtn" style="display: none;">
+                                <span class="dropdown-icon">➕</span>
+                                <span>Create New Account</span>
+                            </li>
+                            <li class="dropdown-item admin-only" id="manageAccountsBtn" style="display: none;">
+                                <span class="dropdown-icon">👥</span>
+                                <span>Manage Accounts</span>
+                            </li>
+                            <li class="dropdown-divider"></li>
+                            <li class="dropdown-item" id="aboutSystemBtn">
+                                <span class="dropdown-icon">ℹ️</span>
+                                <span>About System</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <button class="logout-btn" id="logoutBtn">
+                    <span>Logout</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="top-bar">
+                <div class="page-title-section">
+                    <h1 class="page-title">Production & Quality Management</h1>
+                    <p class="page-subtitle">Monitor production progress and quality control</p>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div class="content-area">
+                <!-- Quick Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-icon">⏳</span>
+                            <h3>Not Started</h3>
+                        </div>
+                        <p class="stat-value" id="notStartedCount">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-icon">🔄</span>
+                            <h3>In Progress</h3>
+                        </div>
+                        <p class="stat-value" id="inProgressCount">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-icon">⚠️</span>
+                            <h3>On Hold</h3>
+                        </div>
+                        <p class="stat-value" id="onHoldCount">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-icon">✅</span>
+                            <h3>Completed</h3>
+                        </div>
+                        <p class="stat-value" id="completedCount">0</p>
+                    </div>
+                </div>
+
+                <!-- Filter and Search -->
+                <div class="filter-section">
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Search by Job Order ID or Client Name...">
+                    </div>
+                    <div class="filter-controls">
+                        <select id="statusFilter" class="filter-select">
+                            <option value="all">All Statuses</option>
+                            <option value="not_started">Not Started</option>
+                            <option value="in_progress">In Progress</option>
+                            <option value="on_hold">On Hold</option>
+                            <option value="completed">Completed</option>
+                        </select>
+                        <select id="departmentFilter" class="filter-select">
+                            <option value="all">All Departments</option>
+                            <option value="pattern_making">Pattern Making</option>
+                            <option value="cutting">Cutting</option>
+                            <option value="sewing">Sewing</option>
+                            <option value="embroidery">Embroidery</option>
+                            <option value="quality_control">Quality Control</option>
+                            <option value="packaging">Packaging</option>
+                        </select>
+                        <button class="btn-secondary" id="filterBtn">Apply Filter</button>
+                    </div>
+                </div>
+
+                <!-- Production Dashboard Table -->
+                <div class="table-container">
+                    <table class="data-table" id="productionTable">
+                        <thead>
+                            <tr>
+                                <th>Job Order ID</th>
+                                <th>Client Name</th>
+                                <th>Garment Type</th>
+                                <th>Quantity</th>
+                                <th>Current Stage</th>
+                                <th>Production Status</th>
+                                <th>Quality Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productionTableBody">
+                            <tr class="empty-state">
+                                <td colspan="8">
+                                    <div class="empty-message">
+                                        <span class="empty-icon">⚙️</span>
+                                        <p>No approved job orders available for production.</p>
+                                        <p class="empty-hint">Job orders must be approved in the Order & Job Management module first.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal: Production Workflow Detail -->
+    <div class="modal" id="productionDetailModal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2 id="modalTitle">Production Workflow</h2>
+                <button class="close-btn" id="closeDetailModalBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- Job Order Summary (Read-Only) -->
+                <div class="job-summary-section">
+                    <h3 class="section-title">Job Order Information</h3>
+                    <div class="job-summary-grid" id="jobSummaryContent">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Production Workflow Stages -->
+                <div class="workflow-section">
+                    <h3 class="section-title">Production Stages</h3>
+                    <div class="workflow-stages" id="workflowStagesContent">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Inventory Check -->
+                <div class="inventory-check-section" id="inventoryCheckSection">
+                    <h3 class="section-title">Material Availability</h3>
+                    <div id="inventoryCheckContent">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Update Stage -->
+    <div class="modal" id="updateStageModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Update Production Stage</h2>
+                <button class="close-btn" id="closeUpdateStageModalBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="updateStageForm">
+                    <input type="hidden" id="updateJobOrderId">
+                    <input type="hidden" id="updateStageName">
+                    
+                    <div class="form-group">
+                        <label>Stage Name</label>
+                        <input type="text" id="displayStageName" readonly>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="stageStatus">Status *</label>
+                        <select id="stageStatus" required>
+                            <option value="">Select Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="in_progress">In Progress</option>
+                            <option value="completed">Completed</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="stageStartDate">Start Date</label>
+                        <input type="date" id="stageStartDate">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="stageCompletionDate">Completion Date</label>
+                        <input type="date" id="stageCompletionDate">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="stageRemarks">Remarks</label>
+                        <textarea id="stageRemarks" rows="3" placeholder="Any notes or issues..."></textarea>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" id="cancelUpdateStageBtn">Cancel</button>
+                        <button type="submit" class="btn-primary">Update Stage</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Quality Control Inspection -->
+    <div class="modal" id="qcInspectionModal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2>Quality Control Inspection</h2>
+                <button class="close-btn" id="closeQCModalBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="qcInspectionForm">
+                    <input type="hidden" id="qcJobOrderId">
+                    
+                    <div class="qc-summary-section">
+                        <h3 class="section-title">Job Order Summary</h3>
+                        <div id="qcJobSummary"></div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h3 class="section-title">Inspection Checklist</h3>
+                        
+                        <div class="checklist-grid">
+                            <label class="checklist-item">
+                                <input type="checkbox" class="qc-checkbox" value="stitching">
+                                <span>Stitching Quality</span>
+                            </label>
+                            <label class="checklist-item">
+                                <input type="checkbox" class="qc-checkbox" value="fabric">
+                                <span>Fabric Integrity</span>
+                            </label>
+                            <label class="checklist-item">
+                                <input type="checkbox" class="qc-checkbox" value="sizing">
+                                <span>Correct Sizing</span>
+                            </label>
+                            <label class="checklist-item">
+                                <input type="checkbox" class="qc-checkbox" value="embroidery">
+                                <span>Embroidery/Print Quality</span>
+                            </label>
+                            <label class="checklist-item">
+                                <input type="checkbox" class="qc-checkbox" value="accessories">
+                                <span>Accessories Attached</span>
+                            </label>
+                            <label class="checklist-item">
+                                <input type="checkbox" class="qc-checkbox" value="color">
+                                <span>Color Consistency</span>
+                            </label>
+                            <label class="checklist-item">
+                                <input type="checkbox" class="qc-checkbox" value="finishing">
+                                <span>Overall Finishing</span>
+                            </label>
+                            <label class="checklist-item">
+                                <input type="checkbox" class="qc-checkbox" value="specifications">
+                                <span>Meets Specifications</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h3 class="section-title">Inspection Result</h3>
+                        <div class="form-group">
+                            <label for="qcResult">QC Result *</label>
+                            <select id="qcResult" required>
+                                <option value="">Select Result</option>
+                                <option value="passed">Passed</option>
+                                <option value="failed">Failed</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="qcDefectNotes">Defect Notes / Comments</label>
+                            <textarea id="qcDefectNotes" rows="4" placeholder="Describe any defects or issues found..."></textarea>
+                        </div>
+                        
+                        <div class="form-group" id="returnStageGroup" style="display: none;">
+                            <label for="returnToStage">Return to Stage</label>
+                            <select id="returnToStage">
+                                <option value="">Select Stage</option>
+                                <option value="sewing">Sewing</option>
+                                <option value="embroidery">Embroidery</option>
+                                <option value="cutting">Cutting</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" id="cancelQCBtn">Cancel</button>
+                        <button type="submit" class="btn-primary">Submit Inspection</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Packaging -->
+    <div class="modal" id="packagingModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Complete Packaging</h2>
+                <button class="close-btn" id="closePackagingModalBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="packagingForm">
+                    <input type="hidden" id="packagingJobOrderId">
+                    
+                    <div class="packaging-summary" id="packagingSummary"></div>
+                    
+                    <div class="form-group">
+                        <label for="packagingNotes">Packaging Notes</label>
+                        <textarea id="packagingNotes" rows="3" placeholder="Any packaging notes..."></textarea>
+                    </div>
+                    
+                    <div class="info-note">
+                        <span class="note-icon">📦</span>
+                        <p>Marking as packaged will complete production and make this job order ready for billing.</p>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" id="cancelPackagingBtn">Cancel</button>
+                        <button type="submit" class="btn-primary">Complete Packaging</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Change Password -->
+    <div class="modal" id="changePasswordModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🔐 Change Password</h2>
+                <button class="close-btn" id="closeChangePasswordBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="changePasswordForm">
+                    <div class="form-group">
+                        <label for="currentPassword">Current Password *</label>
+                        <input type="password" id="currentPassword" required placeholder="Enter current password">
+                    </div>
+                    <div class="form-group">
+                        <label for="newPassword">New Password *</label>
+                        <input type="password" id="newPassword" required placeholder="Enter new password">
+                        <small class="form-hint">Password must be at least 6 characters long</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm New Password *</label>
+                        <input type="password" id="confirmPassword" required placeholder="Re-enter new password">
+                    </div>
+                    <div class="password-strength" id="passwordStrength" style="display: none;">
+                        <div class="strength-bar">
+                            <div class="strength-fill"></div>
+                        </div>
+                        <span class="strength-text"></span>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" id="cancelChangePasswordBtn">Cancel</button>
+                        <button type="submit" class="btn-primary">Change Password</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Create New Account (Admin Only) -->
+    <div class="modal" id="createAccountModal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2>➕ Create New Account</h2>
+                <button class="close-btn" id="closeCreateAccountBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="createAccountForm">
+                    <div class="form-section">
+                        <h3 class="section-title">Account Information</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="newUsername">Username *</label>
+                                <input type="text" id="newUsername" required placeholder="Enter username">
+                                <small class="form-hint">Username must be unique</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="newDisplayName">Display Name *</label>
+                                <input type="text" id="newDisplayName" required placeholder="Enter display name">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="newAccountPassword">Password *</label>
+                                <input type="password" id="newAccountPassword" required placeholder="Enter password">
+                            </div>
+                            <div class="form-group">
+                                <label for="newAccountRole">Role *</label>
+                                <select id="newAccountRole" required>
+                                    <option value="">Select Role</option>
+                                    <option value="administrator">Administrator</option>
+                                    <option value="staff">Staff</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3 class="section-title">Permissions</h3>
+                        <div class="permissions-grid" id="permissionsGrid">
+                            <label class="permission-item">
+                                <input type="checkbox" name="permission" value="order & job" checked>
+                                <span>📋 Order & Job Tracking</span>
+                            </label>
+                            <label class="permission-item">
+                                <input type="checkbox" name="permission" value="Production & Quality" checked>
+                                <span>⚙️ Production & Quality</span>
+                            </label>
+                            <label class="permission-item">
+                                <input type="checkbox" name="permission" value="inventory" checked>
+                                <span>📦 Inventory Management</span>
+                            </label>
+                            <label class="permission-item">
+                                <input type="checkbox" name="permission" value="billing & delivery" checked>
+                                <span>💰 Billing & Delivery</span>
+                            </label>
+                            <label class="permission-item">
+                                <input type="checkbox" name="permission" value="Employee & Payroll">
+                                <span>👥 Employee & Payroll</span>
+                            </label>
+                            <label class="permission-item">
+                                <input type="checkbox" name="permission" value="reports">
+                                <span>📊 Reports & Analytics</span>
+                            </label>
+                        </div>
+                        <p class="form-hint">Select modules this user can access</p>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" id="cancelCreateAccountBtn">Cancel</button>
+                        <button type="submit" class="btn-primary">Create Account</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Manage Accounts (Admin Only) -->
+    <div class="modal" id="manageAccountsModal">
+        <div class="modal-content modal-xlarge">
+            <div class="modal-header">
+                <h2>👥 Manage User Accounts</h2>
+                <button class="close-btn" id="closeManageAccountsBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="accounts-header">
+                    <div class="search-box">
+                        <input type="text" id="accountSearchInput" placeholder="Search users...">
+                    </div>
+                    <button class="btn-primary" id="addNewAccountBtn">+ Add New Account</button>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Display Name</th>
+                                <th>Role</th>
+                                <th>Permissions</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="accountsTableBody">
+                            <!-- Populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: About System -->
+    <div class="modal" id="aboutSystemModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>ℹ️ About GoldenThreads IMS</h2>
+                <button class="close-btn" id="closeAboutSystemBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="about-content">
+                    <div class="about-logo">
+                        <h1 class="logo-text">GoldenThreads</h1>
+                        <p class="logo-subtitle">Integrated Management System</p>
+                    </div>
+                    <div class="about-info">
+                        <div class="info-item">
+                            <strong>Version:</strong> 1.0.0
+                        </div>
+                        <div class="info-item">
+                            <strong>Release Date:</strong> January 2026
+                        </div>
+                        <div class="info-item">
+                            <strong>Modules:</strong> Order Tracking, Production, Inventory, Billing, Payroll, Reports
+                        </div>
+                        <div class="info-item">
+                            <strong>Description:</strong> Comprehensive management system for garment manufacturing operations
+                        </div>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button class="btn-primary" id="closeAboutBtn">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/function/main.js"></script>
+    <script src="/function/user.js"></script>
+    <script src="/function/production.js"></script>
+</body>
+</html>

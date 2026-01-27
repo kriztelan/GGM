@@ -1,0 +1,88 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoldenThreads IMS - Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Cormorant+Garamond:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/log_in.css">
+</head>
+<body>
+    <div class="login-container">
+        <!-- Left Side - Branding -->
+        <div class="login-left">
+            <div class="brand-section">
+                <h1 class="brand-title">GoldenThreads</h1>
+                <p class="brand-subtitle">INTEGRATED MANAGEMENT SYSTEM</p>
+            </div>
+            <div class="decorative-pattern"></div>
+        </div>
+        
+        <!-- Right Side - Login Form -->
+        <div class="login-right">
+            <div class="login-form-wrapper">
+                <!-- Welcome Header -->
+                <div class="welcome-header">
+                    <h2 class="welcome-title">Welcome Back</h2>
+                    <p class="welcome-subtitle">Sign in to access your dashboard</p>
+                </div>
+
+                <!-- Role Selector -->
+                <div class="role-selector">
+                    <button type="button" class="role-btn active" data-role="administrator">
+                        Administrator
+                    </button>
+                    <button type="button" class="role-btn" data-role="staff">
+                        Staff
+                    </button>
+                </div>
+
+                <!-- Login Form -->
+                <form id="loginForm" class="login-form" novalidate>
+                    <div class="form-group">
+                        <label for="username">USERNAME</label>
+                        <input 
+                            type="text" 
+                            id="username" 
+                            name="username" 
+                            placeholder="Enter your username" 
+                            autocomplete="username"
+                            required
+                        >
+                        <span class="error-message" id="usernameError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">PASSWORD</label>
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password" 
+                            placeholder="Enter your password" 
+                            autocomplete="current-password"
+                            required
+                        >
+                        <span class="error-message" id="passwordError"></span>
+                    </div>
+
+                    <!-- Error Message Display -->
+                    <div class="form-error" id="formError" style="display: none;"></div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="sign-in-btn">
+                        <span>LOG IN</span>
+                    </button>
+                </form>
+
+                <!-- Footer -->
+                <div class="login-footer">
+                    <p>GoldenThreads Garments Manufacturing &copy; 2026</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/function/log_in.js"></script>
+</body>
+</html> 

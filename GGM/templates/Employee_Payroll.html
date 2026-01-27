@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee & Payroll - GoldenThreads IMS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Cormorant+Garamond:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/main.css">
+    <link rel="stylesheet" href="/assets/user.css">
+    <link rel="stylesheet" href="/assets/payroll.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1 class="sidebar-brand">GoldenThreads</h1>
+                <p class="sidebar-subtitle">IMS</p>
+            </div>
+           
+            <nav class="sidebar-nav">
+                <a href="/templates/main.html" class="nav-item" data-page="main">
+                    <span class="nav-icon">🏠</span>
+                    <span class="nav-text">Dashboard</span>
+                </a>
+                <a href="/templates/order_job.html" class="nav-item" data-page="order_job">
+                    <span class="nav-icon">📋</span>
+                    <span class="nav-text">Order & Job Tracking</span>
+                </a>
+                <a href="/templates/Production_Quality.html" class="nav-item" data-page="Production_Quality">
+                    <span class="nav-icon">⚙️</span>
+                    <span class="nav-text">Production & Quality</span>
+                </a>
+                <a href="/templates/inventory.html" class="nav-item" data-page="inventory">
+                    <span class="nav-icon">📦</span>
+                    <span class="nav-text">Inventory Management</span>
+                </a>
+                <a href="/templates/billing_delivery.html" class="nav-item" data-page="billing_delivery">
+                    <span class="nav-icon">💰</span>
+                    <span class="nav-text">Billing & Delivery</span>
+                </a>
+                <a href="/templates/Employee_Payroll.html" class="nav-item active" data-page="Employee_Payroll">
+                    <span class="nav-icon">👥</span>
+                    <span class="nav-text">Employee & Payroll</span>
+                </a>
+                <a href="/templates/reports.html" class="nav-item" data-page="reports">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-text">Reports & Analytics</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <!-- Enhanced User Info with Settings Dropdown -->
+                <div class="user-info-container">
+                    <div class="user-info" id="userInfoTrigger">
+                        <div class="user-avatar">
+                            <span id="userInitial">U</span>
+                        </div>
+                        <div class="user-details">
+                            <p class="user-name" id="userName">User</p>
+                            <p class="user-role" id="userRole">Administrator</p>
+                        </div>
+                        <div class="user-dropdown-icon">
+                            <span>⚙️</span>
+                        </div>
+                    </div>
+
+                    <!-- Settings Dropdown Menu -->
+                    <div class="user-settings-dropdown" id="userSettingsDropdown">
+                        <div class="dropdown-header">
+                            <span>User Settings</span>
+                        </div>
+                        <ul class="dropdown-menu">
+                            <li class="dropdown-item" id="changePasswordBtn">
+                                <span class="dropdown-icon">🔐</span>
+                                <span>Change Password</span>
+                            </li>
+                            <li class="dropdown-item admin-only" id="createAccountBtn" style="display: none;">
+                                <span class="dropdown-icon">➕</span>
+                                <span>Create New Account</span>
+                            </li>
+                            <li class="dropdown-item admin-only" id="manageAccountsBtn" style="display: none;">
+                                <span class="dropdown-icon">👥</span>
+                                <span>Manage Accounts</span>
+                            </li>
+                            <li class="dropdown-divider"></li>
+                            <li class="dropdown-item" id="aboutSystemBtn">
+                                <span class="dropdown-icon">ℹ️</span>
+                                <span>About System</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <button class="logout-btn" id="logoutBtn">
+                    <span>Logout</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="page-title-section">
+                    <h1 class="page-title">Employee & Payroll</h1>
+                    <p class="page-subtitle">Workforce management and payroll computation for GoldenThreads manufacturing operations</p>
+                </div>
+                <div class="header-actions">
+                    <button class="notification-btn" id="refreshData" title="Refresh Data">
+                        <span class="notification-icon">🔄</span>
+                    </button>
+                </div>
+            </header>
+
+            <div class="content-area">
+                <!-- Current Period Card -->
+                <div class="welcome-card period-card">
+                    <div class="period-info">
+                        <h3>Current Payroll Period</h3>
+                        <p class="period-value" id="periodDisplay">January 2026</p>
+                    </div>
+                </div>
+
+                <!-- Quick Stats Overview -->
+                <div class="dashboard-grid stats-overview">
+                    <div class="stat-card">
+                        <div class="stat-icon">👥</div>
+                        <div class="stat-info">
+                            <h3>Total Employees</h3>
+                            <p class="stat-value" id="totalEmployees">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">✅</div>
+                        <div class="stat-info">
+                            <h3>Active Workers</h3>
+                            <p class="stat-value" id="activeEmployees">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📅</div>
+                        <div class="stat-info">
+                            <h3>Avg. Attendance</h3>
+                            <p class="stat-value" id="avgAttendance">0%</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">💰</div>
+                        <div class="stat-info">
+                            <h3>Total Payroll</h3>
+                            <p class="stat-value" id="totalPayroll">₱0.00</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 1: Employee Records -->
+                <section class="module-section">
+                    <div class="section-header">
+                        <div class="section-title-group">
+                            <h2 class="section-title">Employee Records</h2>
+                            <span class="section-badge" id="employeeCount">0 employees</span>
+                        </div>
+                        <div class="section-actions">
+                            <button class="btn-secondary" id="filterEmployees">
+                                <span>🔍 Filter</span>
+                            </button>
+                            <button class="btn-primary" id="addEmployeeBtn">
+                                <span>➕ Add Employee</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Employee ID</th>
+                                    <th>Full Name</th>
+                                    <th>Position / Role</th>
+                                    <th>Employment Type</th>
+                                    <th>Basic Rate</th>
+                                    <th>Status</th>
+                                    <th class="actions-column">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="employeeTableBody">
+                                <tr class="loading-row">
+                                    <td colspan="7">
+                                        <div class="loading-spinner"></div>
+                                        <span>Loading employee records...</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Section 2: Attendance Summary -->
+                <section class="module-section">
+                    <div class="section-header">
+                        <div class="section-title-group">
+                            <h2 class="section-title">Attendance Summary</h2>
+                            <span class="section-description">Read-only attendance data from production logs</span>
+                        </div>
+                        <div class="section-actions">
+                            <select class="month-selector" id="attendanceMonth">
+                                <option value="">Select Month</option>
+                            </select>
+                            <button class="btn-secondary" id="exportAttendance">
+                                <span>📥 Export</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Employee Name</th>
+                                    <th>Days Worked</th>
+                                    <th>Overtime Hours</th>
+                                    <th>Absences</th>
+                                    <th>Late / Undertime</th>
+                                    <th>Attendance Rate</th>
+                                </tr>
+                            </thead>
+                            <tbody id="attendanceTableBody">
+                                <tr class="empty-row">
+                                    <td colspan="6">
+                                        <div class="empty-state">
+                                            <span class="empty-icon">📅</span>
+                                            <p>Select a month to view attendance data</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Section 3: Payroll Computation -->
+                <section class="module-section">
+                    <div class="section-header">
+                        <div class="section-title-group">
+                            <h2 class="section-title">Payroll Computation</h2>
+                            <span class="section-description">Backend-computed payroll values for transparency</span>
+                        </div>
+                        <div class="section-actions">
+                            <select class="month-selector" id="payrollMonth">
+                                <option value="">Select Month</option>
+                            </select>
+                            <button class="btn-primary" id="generatePayrollBtn">
+                                <span>🔄 Generate Payroll</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="data-table payroll-table">
+                            <thead>
+                                <tr>
+                                    <th>Employee Name</th>
+                                    <th>Basic Pay</th>
+                                    <th>Overtime Pay</th>
+                                    <th>Deductions</th>
+                                    <th>Gross Pay</th>
+                                    <th class="highlight-column">Net Pay</th>
+                                </tr>
+                            </thead>
+                            <tbody id="payrollTableBody">
+                                <tr class="empty-row">
+                                    <td colspan="6">
+                                        <div class="empty-state">
+                                            <span class="empty-icon">💰</span>
+                                            <p>Select a month and click Generate Payroll to compute salaries</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot id="payrollFooter" style="display: none;">
+                                <tr class="total-row">
+                                    <td><strong>TOTAL</strong></td>
+                                    <td id="totalBasicPay">₱0.00</td>
+                                    <td id="totalOvertimePay">₱0.00</td>
+                                    <td id="totalDeductions">₱0.00</td>
+                                    <td id="totalGrossPay">₱0.00</td>
+                                    <td class="highlight-column" id="totalNetPay"><strong>₱0.00</strong></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Section 4: Payroll Reports -->
+                <section class="module-section">
+                    <div class="section-header">
+                        <div class="section-title-group">
+                            <h2 class="section-title">Payroll Reports</h2>
+                            <span class="section-description">Summary reports for management review</span>
+                        </div>
+                        <div class="section-actions">
+                            <button class="btn-secondary" id="printReport">
+                                <span>🖨️ Print</span>
+                            </button>
+                            <button class="btn-secondary" id="exportReport">
+                                <span>📄 Export PDF</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="report-grid">
+                        <div class="report-card">
+                            <div class="report-header">
+                                <h3>Monthly Summary</h3>
+                                <span class="report-period" id="reportPeriod">-</span>
+                            </div>
+                            <div class="report-stats">
+                                <div class="report-stat-item">
+                                    <span class="report-label">Total Employees Paid</span>
+                                    <span class="report-value" id="reportEmployeeCount">0</span>
+                                </div>
+                                <div class="report-stat-item">
+                                    <span class="report-label">Total Payroll Cost</span>
+                                    <span class="report-value highlight" id="reportTotalCost">₱0.00</span>
+                                </div>
+                                <div class="report-stat-item">
+                                    <span class="report-label">Average Salary</span>
+                                    <span class="report-value" id="reportAvgSalary">₱0.00</span>
+                                </div>
+                                <div class="report-stat-item">
+                                    <span class="report-label">Total Deductions</span>
+                                    <span class="report-value" id="reportTotalDeductions">₱0.00</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="report-card">
+                            <div class="report-header">
+                                <h3>Employment Breakdown</h3>
+                            </div>
+                            <div class="breakdown-chart" id="employmentBreakdown">
+                                <div class="breakdown-item">
+                                    <div class="breakdown-bar">
+                                        <div class="breakdown-fill daily" style="width: 0%" id="dailyBar"></div>
+                                    </div>
+                                    <div class="breakdown-labels">
+                                        <span class="breakdown-type">Daily Workers</span>
+                                        <span class="breakdown-count" id="dailyCount">0</span>
+                                    </div>
+                                </div>
+                                <div class="breakdown-item">
+                                    <div class="breakdown-bar">
+                                        <div class="breakdown-fill monthly" style="width: 0%" id="monthlyBar"></div>
+                                    </div>
+                                    <div class="breakdown-labels">
+                                        <span class="breakdown-type">Monthly Workers</span>
+                                        <span class="breakdown-count" id="monthlyCount">0</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recent-payrolls">
+                        <h3>Recent Payroll Runs</h3>
+                        <div class="table-container">
+                            <table class="data-table compact-table">
+                                <thead>
+                                    <tr>
+                                        <th>Period</th>
+                                        <th>Generated Date</th>
+                                        <th>Employees</th>
+                                        <th>Total Amount</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recentPayrollsBody">
+                                    <tr class="empty-row">
+                                        <td colspan="6">No payroll records available</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal: Add/Edit Employee -->
+    <div class="modal" id="employeeModal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2 id="modalTitle">➕ Add New Employee</h2>
+                <button class="close-btn" id="closeEmployeeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="employeeForm">
+                    <input type="hidden" id="employeeId">
+                    
+                    <div class="form-section">
+                        <h3 class="section-title">Personal Information</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="fullName">Full Name *</label>
+                                <input type="text" id="fullName" name="fullName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="position">Position / Role *</label>
+                                <input type="text" id="position" name="position" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="employmentType">Employment Type *</label>
+                                <select id="employmentType" name="employmentType" required>
+                                    <option value="">Select Type</option>
+                                    <option value="daily">Daily</option>
+                                    <option value="monthly">Monthly</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="basicRate">Basic Rate (₱) *</label>
+                                <input type="number" id="basicRate" name="basicRate" step="0.01" required>
+                                <small class="form-hint">Daily rate or monthly salary</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3 class="section-title">Contact Information</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="contactNumber">Contact Number</label>
+                                <input type="tel" id="contactNumber" name="contactNumber">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="address">Address</label>
+                            <textarea id="address" name="address" rows="2"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3 class="section-title">Employment Details</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="hireDate">Hire Date *</label>
+                                <input type="date" id="hireDate" name="hireDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="status">Status *</label>
+                                <select id="status" name="status" required>
+                                    <option value="active">Active</option>
+                                    <option value="inactive">Inactive</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" id="cancelEmployee">Cancel</button>
+                        <button type="submit" class="btn-primary" id="saveEmployee">Save Employee</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <div class="toast-content">
+            <span class="toast-icon" id="toastIcon">✓</span>
+            <span class="toast-message" id="toastMessage"></span>
+        </div>
+    </div>
+
+    <!-- Include existing modals from main.html -->
+    <!-- Modal: Change Password -->
+    <div class="modal" id="changePasswordModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🔐 Change Password</h2>
+                <button class="close-btn" id="closeChangePasswordBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="changePasswordForm">
+                    <div class="form-group">
+                        <label for="currentPassword">Current Password *</label>
+                        <input type="password" id="currentPassword" required placeholder="Enter current password">
+                    </div>
+                    <div class="form-group">
+                        <label for="newPassword">New Password *</label>
+                        <input type="password" id="newPassword" required placeholder="Enter new password">
+                        <small class="form-hint">Password must be at least 6 characters long</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm New Password *</label>
+                        <input type="password" id="confirmPassword" required placeholder="Re-enter new password">
+                    </div>
+                    <div class="password-strength" id="passwordStrength" style="display: none;">
+                        <div class="strength-bar">
+                            <div class="strength-fill"></div>
+                        </div>
+                        <span class="strength-text"></span>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" id="cancelChangePasswordBtn">Cancel</button>
+                        <button type="submit" class="btn-primary">Change Password</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Create New Account (Admin Only) -->
+    <div class="modal" id="createAccountModal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2>➕ Create New Account</h2>
+                <button class="close-btn" id="closeCreateAccountBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="createAccountForm">
+                    <div class="form-section">
+                        <h3 class="section-title">Account Information</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="newUsername">Username *</label>
+                                <input type="text" id="newUsername" required placeholder="Enter username">
+                                <small class="form-hint">Username must be unique</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="newDisplayName">Display Name *</label>
+                                <input type="text" id="newDisplayName" required placeholder="Enter display name">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="newAccountPassword">Password *</label>
+                                <input type="password" id="newAccountPassword" required placeholder="Enter password">
+                            </div>
+                            <div class="form-group">
+                                <label for="newAccountRole">Role *</label>
+                                <select id="newAccountRole" required>
+                                    <option value="">Select Role</option>
+                                    <option value="administrator">Administrator</option>
+                                    <option value="staff">Staff</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3 class="section-title">Permissions</h3>
+                        <div class="permissions-grid" id="permissionsGrid">
+                            <label class="permission-item">
+                                <input type="checkbox" name="permission" value="order & job" checked>
+                                <span>📋 Order & Job Tracking</span>
+                            </label>
+                            <label class="permission-item">
+                                <input type="checkbox" name="permission" value="Production & Quality" checked>
+                                <span>⚙️ Production & Quality</span>
+                            </label>
+                            <label class="permission-item">
+                                <input type="checkbox" name="permission" value="inventory" checked>
+                                <span>📦 Inventory Management</span>
+                            </label>
+                            <label class="permission-item">
+                                <input type="checkbox" name="permission" value="billing & delivery" checked>
+                                <span>💰 Billing & Delivery</span>
+                            </label>
+                            <label class="permission-item">
+                                <input type="checkbox" name="permission" value="Employee & Payroll">
+                                <span>👥 Employee & Payroll</span>
+                            </label>
+                            <label class="permission-item">
+                                <input type="checkbox" name="permission" value="reports">
+                                <span>📊 Reports & Analytics</span>
+                            </label>
+                        </div>
+                        <p class="form-hint">Select modules this user can access</p>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" id="cancelCreateAccountBtn">Cancel</button>
+                        <button type="submit" class="btn-primary">Create Account</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Manage Accounts (Admin Only) -->
+    <div class="modal" id="manageAccountsModal">
+        <div class="modal-content modal-xlarge">
+            <div class="modal-header">
+                <h2>👥 Manage User Accounts</h2>
+                <button class="close-btn" id="closeManageAccountsBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="accounts-header">
+                    <div class="search-box">
+                        <input type="text" id="accountSearchInput" placeholder="Search users...">
+                    </div>
+                    <button class="btn-primary" id="addNewAccountBtn">+ Add New Account</button>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Display Name</th>
+                                <th>Role</th>
+                                <th>Permissions</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="accountsTableBody">
+                            <!-- Populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: About System -->
+    <div class="modal" id="aboutSystemModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>ℹ️ About GoldenThreads IMS</h2>
+                <button class="close-btn" id="closeAboutSystemBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="about-content">
+                    <div class="about-logo">
+                        <h1 class="logo-text">GoldenThreads</h1>
+                        <p class="logo-subtitle">Integrated Management System</p>
+                    </div>
+                    <div class="about-info">
+                        <div class="info-item">
+                            <strong>Version:</strong> 1.0.0
+                        </div>
+                        <div class="info-item">
+                            <strong>Release Date:</strong> January 2026
+                        </div>
+                        <div class="info-item">
+                            <strong>Modules:</strong> Order Tracking, Production, Inventory, Billing, Payroll, Reports
+                        </div>
+                        <div class="info-item">
+                            <strong>Description:</strong> Comprehensive management system for garment manufacturing operations
+                        </div>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button class="btn-primary" id="closeAboutBtn">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/function/main.js"></script>
+    <script src="/function/user.js"></script>
+    <script src="/function/payroll.js"></script>
+</body>
+</html>
