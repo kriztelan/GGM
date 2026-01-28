@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoldenThreads IMS - Reports & Analytics</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Cormorant+Garamond:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/main.css">
+    <link rel="stylesheet" href="/assets/user.css">
+    <link rel="stylesheet" href="/assets/reports.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1 class="sidebar-brand">GoldenThreads</h1>
+                <p class="sidebar-subtitle">IMS</p>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="/templates/main.html" class="nav-item" data-page="main">
+                    <span class="nav-icon">🏠</span>
+                    <span class="nav-text">Dashboard</span>
+                </a>
+                <a href="/templates/order_job.html" class="nav-item" data-page="order_job">
+                    <span class="nav-icon">📋</span>
+                    <span class="nav-text">Order & Job Tracking</span>
+                </a>
+                <a href="/templates/Production_Quality.html" class="nav-item" data-page="Production_Quality">
+                    <span class="nav-icon">⚙️</span>
+                    <span class="nav-text">Production & Quality</span>
+                </a>
+                <a href="/templates/inventory.html" class="nav-item" data-page="inventory">
+                    <span class="nav-icon">📦</span>
+                    <span class="nav-text">Inventory Management</span>
+                </a>
+                <a href="/templates/billing_delivery.html" class="nav-item" data-page="billing_delivery">
+                    <span class="nav-icon">💰</span>
+                    <span class="nav-text">Billing & Delivery</span>
+                </a>
+                <a href="/templates/Employee_Payroll.html" class="nav-item" data-page="Employee_Payroll">
+                    <span class="nav-icon">👥</span>
+                    <span class="nav-text">Employee & Payroll</span>
+                </a>
+                <a href="/templates/reports.html" class="nav-item active" data-page="reports">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-text">Reports & Analytics</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <!-- Enhanced User Info with Settings Dropdown -->
+                <div class="user-info-container">
+                    <div class="user-info" id="userInfoTrigger">
+                        <div class="user-avatar">
+                            <span id="userInitial">U</span>
+                        </div>
+                        <div class="user-details">
+                            <p class="user-name" id="userName">User</p>
+                            <p class="user-role" id="userRole">Administrator</p>
+                        </div>
+                        <div class="user-dropdown-icon">
+                            <span>⚙️</span>
+                        </div>
+                    </div>
+
+                    <!-- Settings Dropdown Menu -->
+                    <div class="user-settings-dropdown" id="userSettingsDropdown">
+                        <div class="dropdown-header">
+                            <span>User Settings</span>
+                        </div>
+                        <ul class="dropdown-menu">
+                            <li class="dropdown-item" id="changePasswordBtn">
+                                <span class="dropdown-icon">🔐</span>
+                                <span>Change Password</span>
+                            </li>
+                            <li class="dropdown-item admin-only" id="createAccountBtn" style="display: none;">
+                                <span class="dropdown-icon">➕</span>
+                                <span>Create New Account</span>
+                            </li>
+                            <li class="dropdown-item admin-only" id="manageAccountsBtn" style="display: none;">
+                                <span class="dropdown-icon">👥</span>
+                                <span>Manage Accounts</span>
+                            </li>
+                            <li class="dropdown-divider"></li>
+                            <li class="dropdown-item" id="aboutSystemBtn">
+                                <span class="dropdown-icon">ℹ️</span>
+                                <span>About System</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <button class="logout-btn" id="logoutBtn">
+                    <span>Logout</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <div class="page-title-section">
+                    <h1 class="page-title">Reports & Analytics</h1>
+                    <p class="page-subtitle">View comprehensive system-generated reports and performance insights</p>
+                </div>
+                <div class="header-actions">
+                    <div class="date-display">
+                        <span class="date-icon">📅</span>
+                        <span id="currentDate">Loading...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="content-area">
+                <!-- Filter Controls Section -->
+                <div class="filter-section">
+                    <div class="filter-card">
+                        <div class="filter-header">
+                            <h3 class="filter-title">
+                                <span class="filter-icon">🔍</span>
+                                Report Filters
+                            </h3>
+                        </div>
+                        <div class="filter-body">
+                            <div class="filter-row">
+                                <div class="filter-group">
+                                    <label for="startDate">Start Date</label>
+                                    <input type="date" id="startDate" class="filter-input">
+                                </div>
+                                <div class="filter-group">
+                                    <label for="endDate">End Date</label>
+                                    <input type="date" id="endDate" class="filter-input">
+                                </div>
+                                <div class="filter-group">
+                                    <label for="reportCategory">Report Category</label>
+                                    <select id="reportCategory" class="filter-input">
+                                        <option value="all">All Reports</option>
+                                        <option value="production">Production Output</option>
+                                        <option value="inventory">Inventory Usage</option>
+                                        <option value="sales">Sales and Billing</option>
+                                        <option value="payroll">Payroll Summary</option>
+                                        <option value="delivery">Delivery Performance</option>
+                                    </select>
+                                </div>
+                                <div class="filter-group filter-actions">
+                                    <button class="btn-primary" id="generateReportBtn">
+                                        <span class="btn-icon">📊</span>
+                                        Generate Report
+                                    </button>
+                                    <button class="btn-secondary" id="resetFiltersBtn">
+                                        <span class="btn-icon">🔄</span>
+                                        Reset
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Summary Overview Section -->
+                <div class="summary-section">
+                    <h3 class="section-heading">
+                        <span class="heading-icon">📈</span>
+                        Performance Summary
+                    </h3>
+                    <div class="summary-grid">
+                        <div class="summary-card card-production">
+                            <div class="summary-icon-wrapper">
+                                <span class="summary-icon">📋</span>
+                            </div>
+                            <div class="summary-content">
+                                <p class="summary-label">Completed Job Orders</p>
+                                <p class="summary-value" id="totalOrders">--</p>
+                                <div class="summary-trend trend-up">
+                                    <span class="trend-icon">↑</span>
+                                    <span class="trend-value">12.5%</span>
+                                    <span class="trend-text">vs last period</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="summary-card card-sales">
+                            <div class="summary-icon-wrapper">
+                                <span class="summary-icon">💰</span>
+                            </div>
+                            <div class="summary-content">
+                                <p class="summary-label">Total Sales Amount</p>
+                                <p class="summary-value" id="totalSales">--</p>
+                                <div class="summary-trend trend-up">
+                                    <span class="trend-icon">↑</span>
+                                    <span class="trend-value">8.3%</span>
+                                    <span class="trend-text">vs last period</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="summary-card card-inventory">
+                            <div class="summary-icon-wrapper">
+                                <span class="summary-icon">📦</span>
+                            </div>
+                            <div class="summary-content">
+                                <p class="summary-label">Materials Consumed</p>
+                                <p class="summary-value" id="totalMaterials">--</p>
+                                <div class="summary-trend trend-down">
+                                    <span class="trend-icon">↓</span>
+                                    <span class="trend-value">3.2%</span>
+                                    <span class="trend-text">vs last period</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="summary-card card-payroll">
+                            <div class="summary-icon-wrapper">
+                                <span class="summary-icon">👥</span>
+                            </div>
+                            <div class="summary-content">
+                                <p class="summary-label">Total Payroll Cost</p>
+                                <p class="summary-value" id="totalPayroll">--</p>
+                                <div class="summary-trend trend-stable">
+                                    <span class="trend-icon">→</span>
+                                    <span class="trend-value">0.5%</span>
+                                    <span class="trend-text">vs last period</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="summary-card card-delivery">
+                            <div class="summary-icon-wrapper">
+                                <span class="summary-icon">🚚</span>
+                            </div>
+                            <div class="summary-content">
+                                <p class="summary-label">Delivery Completion</p>
+                                <p class="summary-value" id="deliveryRate">--</p>
+                                <div class="summary-trend trend-up">
+                                    <span class="trend-icon">↑</span>
+                                    <span class="trend-value">5.1%</span>
+                                    <span class="trend-text">vs last period</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Detailed Reports Section -->
+                <div class="reports-section">
+                    <div class="reports-header">
+                        <h3 class="section-heading">
+                            <span class="heading-icon">📊</span>
+                            Detailed Reports
+                        </h3>
+                        <div class="report-actions">
+                            <button class="action-btn" id="printReportBtn">
+                                <span class="btn-icon">🖨️</span>
+                                Print Report
+                            </button>
+                            <button class="action-btn" id="exportReportBtn">
+                                <span class="btn-icon">📥</span>
+                                Export Report
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Report Tabs -->
+                    <div class="report-tabs">
+                        <button class="tab-btn active" data-report="production">Production Output</button>
+                        <button class="tab-btn" data-report="inventory">Inventory Usage</button>
+                        <button class="tab-btn" data-report="sales">Sales & Billing</button>
+                        <button class="tab-btn" data-report="payroll">Payroll Summary</button>
+                        <button class="tab-btn" data-report="delivery">Delivery Performance</button>
+                    </div>
+
+                    <!-- Production Output Report -->
+                    <div class="report-content active" id="productionReport">
+                        <div class="report-table-container">
+                            <table class="report-table">
+                                <thead>
+                                    <tr>
+                                        <th>Job Order #</th>
+                                        <th>Garment Type</th>
+                                        <th>Quantity Produced</th>
+                                        <th>Production Stage</th>
+                                        <th>Completion Date</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="productionTableBody">
+                                    <!-- Data populated by JavaScript -->
+                                    <tr class="loading-row">
+                                        <td colspan="6" class="loading-cell">
+                                            <div class="loading-spinner"></div>
+                                            <p>Loading production data...</p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Inventory Usage Report -->
+                    <div class="report-content" id="inventoryReport">
+                        <div class="report-table-container">
+                            <table class="report-table">
+                                <thead>
+                                    <tr>
+                                        <th>Material Name</th>
+                                        <th>Quantity Used</th>
+                                        <th>Remaining Stock</th>
+                                        <th>Unit</th>
+                                        <th>Usage Date</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="inventoryTableBody">
+                                    <tr class="loading-row">
+                                        <td colspan="6" class="loading-cell">
+                                            <div class="loading-spinner"></div>
+                                            <p>Loading inventory data...</p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Sales and Billing Report -->
+                    <div class="report-content" id="salesReport">
+                        <div class="report-table-container">
+                            <table class="report-table">
+                                <thead>
+                                    <tr>
+                                        <th>Transaction #</th>
+                                        <th>Client Name</th>
+                                        <th>Total Amount</th>
+                                        <th>Payment Status</th>
+                                        <th>Transaction Date</th>
+                                        <th>Payment Method</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="salesTableBody">
+                                    <tr class="loading-row">
+                                        <td colspan="6" class="loading-cell">
+                                            <div class="loading-spinner"></div>
+                                            <p>Loading sales data...</p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Payroll Summary Report -->
+                    <div class="report-content" id="payrollReport">
+                        <div class="report-table-container">
+                            <table class="report-table">
+                                <thead>
+                                    <tr>
+                                        <th>Employee Name</th>
+                                        <th>Total Work Days</th>
+                                        <th>Gross Pay</th>
+                                        <th>Deductions</th>
+                                        <th>Net Pay</th>
+                                        <th>Payment Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="payrollTableBody">
+                                    <tr class="loading-row">
+                                        <td colspan="6" class="loading-cell">
+                                            <div class="loading-spinner"></div>
+                                            <p>Loading payroll data...</p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Delivery Performance Report -->
+                    <div class="report-content" id="deliveryReport">
+                        <div class="report-table-container">
+                            <table class="report-table">
+                                <thead>
+                                    <tr>
+                                        <th>Job Order #</th>
+                                        <th>Client Name</th>
+                                        <th>Delivery Status</th>
+                                        <th>Scheduled Date</th>
+                                        <th>Actual Date</th>
+                                        <th>On-Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="deliveryTableBody">
+                                    <tr class="loading-row">
+                                        <td colspan="6" class="loading-cell">
+                                            <div class="loading-spinner"></div>
+                                            <p>Loading delivery data...</p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals (Same as main.html) -->
+    <!-- Modal: Change Password -->
+    <div class="modal" id="changePasswordModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🔐 Change Password</h2>
+                <button class="close-btn" id="closeChangePasswordBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="changePasswordForm">
+                    <div class="form-group">
+                        <label for="currentPassword">Current Password *</label>
+                        <input type="password" id="currentPassword" required placeholder="Enter current password">
+                    </div>
+                    <div class="form-group">
+                        <label for="newPassword">New Password *</label>
+                        <input type="password" id="newPassword" required placeholder="Enter new password">
+                        <small class="form-hint">Password must be at least 6 characters long</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm New Password *</label>
+                        <input type="password" id="confirmPassword" required placeholder="Re-enter new password">
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" id="cancelChangePasswordBtn">Cancel</button>
+                        <button type="submit" class="btn-primary">Change Password</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Create New Account (Admin Only) -->
+    <div class="modal" id="createAccountModal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2>➕ Create New Account</h2>
+                <button class="close-btn" id="closeCreateAccountBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="createAccountForm">
+                    <div class="form-section">
+                        <h3 class="section-title">Account Information</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="newUsername">Username *</label>
+                                <input type="text" id="newUsername" required placeholder="Enter username">
+                            </div>
+                            <div class="form-group">
+                                <label for="newDisplayName">Display Name *</label>
+                                <input type="text" id="newDisplayName" required placeholder="Enter display name">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="newAccountPassword">Password *</label>
+                                <input type="password" id="newAccountPassword" required placeholder="Enter password">
+                            </div>
+                            <div class="form-group">
+                                <label for="newAccountRole">Role *</label>
+                                <select id="newAccountRole" required>
+                                    <option value="">Select Role</option>
+                                    <option value="administrator">Administrator</option>
+                                    <option value="staff">Staff</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3 class="section-title">Permissions</h3>
+                        <div class="permissions-grid" id="permissionsGrid">
+                            <label class="permission-item">
+                                <input type="checkbox" name="permission" value="order & job" checked>
+                                <span>📋 Order & Job Tracking</span>
+                            </label>
+                            <label class="permission-item">
+                                <input type="checkbox" name="permission" value="Production & Quality" checked>
+                                <span>⚙️ Production & Quality</span>
+                            </label>
+                            <label class="permission-item">
+                                <input type="checkbox" name="permission" value="inventory" checked>
+                                <span>📦 Inventory Management</span>
+                            </label>
+                            <label class="permission-item">
+                                <input type="checkbox" name="permission" value="billing & delivery" checked>
+                                <span>💰 Billing & Delivery</span>
+                            </label>
+                            <label class="permission-item">
+                                <input type="checkbox" name="permission" value="Employee & Payroll">
+                                <span>👥 Employee & Payroll</span>
+                            </label>
+                            <label class="permission-item">
+                                <input type="checkbox" name="permission" value="reports">
+                                <span>📊 Reports & Analytics</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" id="cancelCreateAccountBtn">Cancel</button>
+                        <button type="submit" class="btn-primary">Create Account</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Manage Accounts (Admin Only) -->
+    <div class="modal" id="manageAccountsModal">
+        <div class="modal-content modal-xlarge">
+            <div class="modal-header">
+                <h2>👥 Manage User Accounts</h2>
+                <button class="close-btn" id="closeManageAccountsBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="accounts-header">
+                    <div class="search-box">
+                        <input type="text" id="accountSearchInput" placeholder="Search users...">
+                    </div>
+                    <button class="btn-primary" id="addNewAccountBtn">+ Add New Account</button>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Display Name</th>
+                                <th>Role</th>
+                                <th>Permissions</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="accountsTableBody">
+                            <!-- Populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: About System -->
+    <div class="modal" id="aboutSystemModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>ℹ️ About GoldenThreads IMS</h2>
+                <button class="close-btn" id="closeAboutSystemBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="about-content">
+                    <div class="about-logo">
+                        <h1 class="logo-text">GoldenThreads</h1>
+                        <p class="logo-subtitle">Integrated Management System</p>
+                    </div>
+                    <div class="about-info">
+                        <div class="info-item">
+                            <strong>Version:</strong> 1.0.0
+                        </div>
+                        <div class="info-item">
+                            <strong>Release Date:</strong> January 2026
+                        </div>
+                        <div class="info-item">
+                            <strong>Modules:</strong> Order Tracking, Production, Inventory, Billing, Payroll, Reports
+                        </div>
+                        <div class="info-item">
+                            <strong>Description:</strong> Comprehensive management system for garment manufacturing operations
+                        </div>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button class="btn-primary" id="closeAboutBtn">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/function/main.js"></script>
+    <script src="/function/user.js"></script>
+    <script src="/function/reports.js"></script>
+</body>
+</html>
